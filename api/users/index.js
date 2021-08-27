@@ -92,16 +92,16 @@ router.delete("/:id", async (req, res) => {
   try {
     db.database()
       .ref("users")
-      .orderByChild("name")
+      .orderByChild("id")
       .equalTo(req.params.id)
       .on("value", function (snapshot) {
-        console.log(snapshot.val());
+        let idkey = snapshot.val();
         snapshot.forEach(function (data) {
-          db.database().ref(`/user/${data.key}`).remove();
+          await db.database().ref(`/users/${data.key}`).remove();
           res.json({
             status: 200,
-            message: "Get data has successfully",
-            data: data,
+            message: "This your detail user",
+            data: idkey,
           });
         });
       });
