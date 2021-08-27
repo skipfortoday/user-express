@@ -90,15 +90,14 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    firebase
-      .database()
+    db.database()
       .ref("users")
       .orderByChild("name")
       .equalTo(req.params.id)
       .on("value", function (snapshot) {
         console.log(snapshot.val());
         snapshot.forEach(function (data) {
-          firebase.database().ref(`/user/${data.key}`).remove();
+          db.database().ref(`/user/${data.key}`).remove();
           res.json({
             status: 200,
             message: "Get data has successfully",
