@@ -22,15 +22,16 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    console.log(req.params.id);
     db.database()
-      .ref(`users/${req.params.id}`)
-      .on("value", (snapshot) => {
-        const data = snapshot.val();
+      .ref("users")
+      .orderByChild("id")
+      .equalTo(req.params.id)
+      .on("value", function (snapshot) {
+        let idkey = snapshot.val();
         res.json({
           status: 200,
-          message: "This your detyail users ",
-          data: data,
+          message: "This your detail user",
+          data: idkey,
         });
       });
   } catch (error) {
@@ -41,6 +42,17 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    if (
+      req.body.id === undefined ||
+      req.body.name === undefined ||
+      req.body.jobTitle === undefined ||
+      req.body.age === undefined ||
+      req.body.location === undefined ||
+      req.body.desc === undefined
+    )
+      res.status(401).json({
+        message: "lengkapi parameter anda",
+      });
     db.database()
       .ref("/users")
       .push()
