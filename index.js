@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const users = require("./api/users");
-
+const cors = require("cors");
+app.use(cors());
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", users);
