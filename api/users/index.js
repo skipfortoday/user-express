@@ -97,10 +97,10 @@ router.delete("/:id", async (req, res) => {
       .on("value", function (snapshot) {
         let idkey = snapshot.val();
         snapshot.forEach(function (data) {
-          await db.database().ref(`/users/${data.key}`).remove();
+          db.database().ref(`/users/${data.key}`).remove();
           res.json({
             status: 200,
-            message: "This your detail user",
+            message: "Deleteduser",
             data: idkey,
           });
         });
