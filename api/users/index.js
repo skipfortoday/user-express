@@ -75,13 +75,37 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    db.database().ref(`/user/${req.params.id}`).update({
-      name: req.body.name,
-      jobTitle: req.body.jobTitle,
-      age: req.body.age,
-      location: req.body.location,
-      desc: req.body.desc,
-    });
+    if (
+      req.body.name === undefined ||
+      req.body.jobTitle === undefined ||
+      req.body.age === undefined ||
+      req.body.location === undefined ||
+      req.body.desc === undefined
+    )
+      res.status(401).json({
+        message: "lengkapi parameter anda",
+      });
+    db.database()
+      .ref("users")
+      .orderByChild("id")
+      .equalTo(req.params.id)
+      .on("value", function (snapshot) {
+        let idkey = snapshot.val();
+        snapshot.forEach(function (data) {
+          db.database().ref(`/user/${data.key}`).update({
+            name: req.body.name,
+            jobTitle: req.body.jobTitle,
+            age: req.body.age,
+            location: req.body.location,
+            desc: req.body.desc,
+          });
+          res.json({
+            status: 200,
+            message: "Edited User",
+            data: idkey,
+          });
+        });
+      });
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
