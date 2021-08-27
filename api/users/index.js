@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
       .ref("/users")
       .push()
       .set({
+        id: req.body.id,
         name: req.body.name,
         jobTitle: req.body.jobTitle,
         age: req.body.age,
