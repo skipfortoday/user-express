@@ -85,11 +85,5 @@ desc: "deskripsi pekerjaan"
 
 ## Thanks
 
-for boilerplate express ready vercel
+for boilerplate express ready deploy to vercel
 https://github.com/hatuanem199801/express-vercel.git"
-
-Menajalankan BE : npm start
-Sudah include config vercel.json bisa langsung di deploy ke vercel
-forked from (github id hatuanem199801)
-
-User Property
