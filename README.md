@@ -4,6 +4,7 @@ DB Menggunakan Firebase
 
 Menajalankan BE : npm start
 Sudah include config vercel.json bisa langsung di deploy ke vercel
+forked from (github id hatuanem199801)
 
 End Point:
 GET /api/users => Menampilkan List User
