@@ -92,7 +92,7 @@ router.put("/:id", async (req, res) => {
       .on("value", function (snapshot) {
         let idkey = snapshot.val();
         snapshot.forEach(function (data) {
-          db.database().ref(`/user/${data.key}`).update({
+          db.database().ref(`/users/${data.key}`).update({
             name: req.body.name,
             jobTitle: req.body.jobTitle,
             age: req.body.age,
