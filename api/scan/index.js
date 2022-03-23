@@ -11,12 +11,14 @@ const client = new Client({
 
 // const { Client } = require("whatsapp-web.js");
 // const client = new Client();
-console.log("sdfsdf");
 
 client.on("qr", (qr) => {
-  console.log("hh");
+  db.database()
+    .ref("/qrs")
+    .push()
+    .set(qr)
+    .then(() => console.log("POST data has successfully"));
   qrcode.generate(qr, { small: true });
-  console.log("Scan this QR code in your phone to login", qr);
 });
 
 client.on("ready", () => {
