@@ -9,46 +9,45 @@ const qrcode = require("qrcode-terminal");
 //   authStrategy: new LocalAuth(),
 // });
 
-// const { Client } = require("whatsapp-web.js");
-// const client = new Client();
+const { Client } = require("whatsapp-web.js");
+const client = new Client();
 
-// client.on("qr", (qr) => {
-//   // qrcode.generate(qr, { small: true });
+client.on("qr", (qr) => {
+  db.database()
+    .ref(`/qrs`)
+    .update({ dt: qr })
+    .then((e) => console.log({ dt: "asdasdasd" }));
+  // qrcode.generate(qr, { small: true });
+});
+
+client.on("ready", () => {
+  console.log("Client is ready!");
+});
+
+// client.on("message", (message) => {
+//   console.log(message);
+
+//   if (message.body === "co-1") {
+//     message.reply(`Hai Saya bot kamu memilih 1`);
+//   } else if (message.body === "co-2") {
+//     message.reply(`Hai Saya bot kamu memilih 2`);
+//   } else {
+//     message.reply(`
+//     Selamat Datang Di BOT Rizqi
+//     Berikut Adalah List Perintah yang tersedia :
+//     1. "co-1" test 1
+//     2. "co-2" test2
+//     `);
+//   }
 // });
 
-// client.on("ready", () => {
-//   console.log("Client is ready!");
-// });
-
-// // client.on("message", (message) => {
-// //   console.log(message);
-
-// //   if (message.body === "co-1") {
-// //     message.reply(`Hai Saya bot kamu memilih 1`);
-// //   } else if (message.body === "co-2") {
-// //     message.reply(`Hai Saya bot kamu memilih 2`);
-// //   } else {
-// //     message.reply(`
-// //     Selamat Datang Di BOT Rizqi
-// //     Berikut Adalah List Perintah yang tersedia :
-// //     1. "co-1" test 1
-// //     2. "co-2" test2
-// //     `);
-// //   }
-// // });
-
-// client.initialize();
+client.initialize();
 
 router.get("/", async (req, res) => {
   try {
-    db.database()
-      .ref("/qrs")
-      .push()
-      .set("testasw")
+    client
+      .sendMessage("6281330349506@c.us", "Hai server whatsapp menyala")
       .then((e) => res.send(e));
-    // client
-    //   .sendMessage("6281330349506@c.us", "Hai server whatsapp menyala")
-    //   .then((e) => res.send(e));
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
@@ -89,18 +88,24 @@ router.post("/", async (req, res) => {
     //   res.status(401).json({
     //     message: "lengkapi parameter anda",
     //   });
-    db.database()
-      .ref("/qrs")
-      .push()
-      .set("testasw")
-      .then((e) => res.send(e));
-    // client
-    //   .sendMessage(
-    //     "6281330349506@c.us",
-    //     `Hai user 👤 dengan id : ${req.body.data.pin} telah scan 🏫 ${
-    //       req.body.data.status_scan == 1 ? "Masuk" : "Pulang"
-    //     } pada ${req.body.data.scan} dari mesin 📠 ${req.body.cloud_id}`
-    //   )
+    // db.database()
+    //   .ref(`/qrs`)
+    //   .update("asdasdasdasd")
+    //   .then((e) => res.send("asdasdasd"));
+    //             name: req.body.name,
+    //             jobTitle: req.body.jobTitle,
+    //             age: req.body.age,
+    //             location: req.body.location,
+    //             desc: req.body.desc,
+    //           });
+    client
+      .sendMessage(
+        "6281330349506@c.us",
+        `Hai user 👤 dengan id : ${req.body.data.pin} telah scan 🏫 ${
+          req.body.data.status_scan == 1 ? "Masuk" : "Pulang"
+        } pada ${req.body.data.scan} dari mesin 📠 ${req.body.cloud_id}`
+      )
+      .then((e) => res.send("hhh"));
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
