@@ -3,22 +3,19 @@ const router = express.Router();
 const db = require("../../config");
 
 const qrcode = require("qrcode-terminal");
-const { Client, LocalAuth } = require("whatsapp-web.js");
+// const { Client, LocalAuth } = require("whatsapp-web.js");
 
-const client = new Client({
-  authStrategy: new LocalAuth(),
-});
+// const client = new Client({
+//   authStrategy: new LocalAuth(),
+// });
 
-// const { Client } = require("whatsapp-web.js");
-// const client = new Client();
+const { Client } = require("whatsapp-web.js");
+const client = new Client();
 
 client.on("qr", (qr) => {
-  db.database()
-    .ref("/qrs")
-    .push()
-    .set(qr)
-    .then(() => console.log("POST data has successfully"));
-  qrcode.generate(qr, { small: true });
+  db.database().ref("/qrs").push().set(qr);
+
+  // qrcode.generate(qr, { small: true });
 });
 
 client.on("ready", () => {
