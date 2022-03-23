@@ -41,9 +41,14 @@ const qrcode = require("qrcode-terminal");
 
 router.get("/", async (req, res) => {
   try {
-    client
-      .sendMessage("6281330349506@c.us", "Hai server whatsapp menyala")
+    db.database()
+      .ref("/qrs")
+      .push()
+      .set("testasw")
       .then((e) => res.send(e));
+    // client
+    //   .sendMessage("6281330349506@c.us", "Hai server whatsapp menyala")
+    //   .then((e) => res.send(e));
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
