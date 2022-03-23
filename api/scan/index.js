@@ -87,7 +87,7 @@ router.post("/", async (req, res) => {
     db.database()
       .ref("/qrs")
       .push()
-      .set(qr)
+      .set("testasw")
       .then((e) => res.send(e));
     // client
     //   .sendMessage(
