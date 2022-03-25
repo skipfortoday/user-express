@@ -3,7 +3,35 @@ const router = express.Router();
 const db = require("../../config");
 
 const qrcode = require("qrcode-terminal");
+
+const venom = require("venom-bot");
+
+venom
+  .create({
+    session: "session-name", //name of session
+  })
+  .then((client) => start(client))
+  .catch((erro) => {
+    console.log(erro);
+  });
+
+function start(client) {
+  client.onMessage((message) => {
+    if (message.body === "Hi" && message.isGroupMsg === false) {
+      client
+        .sendText(message.from, "Welcome Venom 🕷")
+        .then((result) => {
+          console.log("Result: ", result); //return object success
+        })
+        .catch((erro) => {
+          console.error("Error when sending: ", erro); //return object error
+        });
+    }
+  });
+}
+
 // const { Client, LocalAuth } = require("whatsapp-web.js");
+// const WwebjsSender = require("@deathabyss/wwebjs-sender");
 
 // const client = new Client({
 //   authStrategy: new LocalAuth(),
@@ -13,42 +41,99 @@ const qrcode = require("qrcode-terminal");
 // const client = new Client();
 
 // client.on("qr", (qr) => {
-//   db.database()
-//     .ref(`/qrs`)
-//     .update({ dt: qr })
-//     .then((e) => console.log({ dt: "asdasdasd" }));
-//   // qrcode.generate(qr, { small: true });
+//   // db.database()
+//   //   .ref(`/qrs`)
+//   //   .update({ dt: qr })
+//   //   .then((e) => console.log({ dt: "asdasdasd" }));
+//   qrcode.generate(qr, { small: true });
 // });
 
 // client.on("ready", () => {
 //   console.log("Client is ready!");
 // });
 
-// client.on("message", (message) => {
-//   console.log(message);
+// client.on("message", (msg) => {
+//   if (msg.body == "!command") {
+//     const { from } = msg;
+//     console.log(from);
+//     let embed = new WwebjsSender.MessageEmbed()
+//       .setTitle("✅ | Successful process!")
+//       .setDescription("The process has been successful!")
+//       .addField("✔", "To confirm")
+//       .addField("❌", "To cancel")
+//       .addFields({
+//         name: "Now you have 2 buttons to   choose!",
+//         value: "✔ or ❌",
+//       })
+//       .setFooter("WwebjsSender")
+//       .setTimestamp();
 
-//   if (message.body === "co-1") {
-//     message.reply(`Hai Saya bot kamu memilih 1`);
-//   } else if (message.body === "co-2") {
-//     message.reply(`Hai Saya bot kamu memilih 2`);
-//   } else {
-//     message.reply(`
-//     Selamat Datang Di BOT Rizqi
-//     Berikut Adalah List Perintah yang tersedia :
-//     1. "co-1" test 1
-//     2. "co-2" test2
-//     `);
+//     let button1 = new WwebjsSender.MessageButton()
+//       .setCustomId("confirm")
+//       .setLabel("✔");
+
+//     let button2 = new WwebjsSender.MessageButton()
+//       .setCustomId("cancel")
+//       .setLabel("❌");
+
+//     WwebjsSender.send({
+//       client: client,
+//       number: from,
+//       embed: embed,
+//       button: [button1, button2],
+//     }).then((e) => console.log(e).catch((e) => console.log(e)));
 //   }
 // });
 
 // client.initialize();
 
+// const makeWASocket, { makeInMemoryStore } require ("@adiwajshing/baileys");
+// // the store maintains the data of the WA connection in memory
+// // can be written out to a file & read from it
+// const store = makeInMemoryStore({});
+// // can be read from a file
+// store.readFromFile("./baileys_store.json");
+// // saves the state to a file every 10s
+// setInterval(() => {
+//   store.writeToFile("./baileys_store.json");
+// }, 10_000);
+
+// const sock = makeWASocket({});
+// // will listen from this socket
+// // the store can listen from a new socket once the current socket outlives its lifetime
+// store.bind(sock.ev);
+
+// sock.ev.on("chats.set", () => {
+//   // can use "store.chats" however you want, even after the socket dies out
+//   // "chats" => a KeyedDB instance
+//   console.log("got chats", store.chats.all());
+// });
+
+// sock.ev.on("contacts.set", () => {
+//   console.log("got contacts", Object.values(store.contacts));
+// });
+
 router.get("/", async (req, res) => {
   try {
-    db.database()
-      .ref(`/qrs`)
-      .update({ dt: "qr" })
-      .then((e) => res.send({ dt: "asdasdasd" }));
+    console.log(req.body, "ini req body get");
+
+    if (!req.body.data || !req.body.cloud_id)
+      res.send({
+        status: false,
+        message: "verivikasi data / cloud_id tidak sesuai jangan jadi penyusup",
+      });
+    if ((req.body.type = "attlog")) {
+      // client
+      //   .sendMessage(
+      //     "6281330349506@c.us",
+      //     `Hai user 👤 dengan id : ${req.body.data.pin} telah scan 🏫 ${
+      //       req.body.data.status_scan == 1 ? "Masuk" : "Pulang"
+      //     } pada ${req.body.data.scan} dari mesin 📠 ${req.body.cloud_id}`
+      //   )
+      //   .then((e) => res.send("hhh"));
+    } else res.send("bukan att log");
+
+    res.send("ok");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
@@ -77,6 +162,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body, "ini req body post");
     //{"type":"attlog", "cloud_id":"XXXXXX", "data":{"pin":"1", "scan":"2020-07-21 10:11", "verify":"1", "status_scan":"1"}}
     // if (
     //   req.body.id === undefined ||

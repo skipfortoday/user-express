@@ -9,5 +9,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", users);
 app.use("/api/scan", scan);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
