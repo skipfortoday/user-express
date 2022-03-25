@@ -1,16 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../config");
-
-const qrcode = require("qrcode-terminal");
-
 const venom = require("venom-bot");
+let qrCode = null;
 
 venom
-  .create({
-    session: "session-name", //name of session
+  .create(
+    //session
+    "sessionName",
+    (base64Qrimg, asciiQR, attempts, urlCode) => {
+      qrCode = base64Qrimg;
+    }
+  )
+  .then((client) => {
+    start(client);
   })
-  .then((client) => start(client))
   .catch((erro) => {
     console.log(erro);
   });
@@ -115,25 +119,7 @@ function start(client) {
 
 router.get("/", async (req, res) => {
   try {
-    console.log(req.body, "ini req body get");
-
-    if (!req.body.data || !req.body.cloud_id)
-      res.send({
-        status: false,
-        message: "verivikasi data / cloud_id tidak sesuai jangan jadi penyusup",
-      });
-    if ((req.body.type = "attlog")) {
-      // client
-      //   .sendMessage(
-      //     "6281330349506@c.us",
-      //     `Hai user 👤 dengan id : ${req.body.data.pin} telah scan 🏫 ${
-      //       req.body.data.status_scan == 1 ? "Masuk" : "Pulang"
-      //     } pada ${req.body.data.scan} dari mesin 📠 ${req.body.cloud_id}`
-      //   )
-      //   .then((e) => res.send("hhh"));
-    } else res.send("bukan att log");
-
-    res.send("ok");
+    res.send(qrCode);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
