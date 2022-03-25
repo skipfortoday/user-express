@@ -10,6 +10,9 @@ venom
     "sessionName",
     (base64Qrimg, asciiQR, attempts, urlCode) => {
       qrCode = base64Qrimg;
+    },
+    {
+      puppeteerOptions: { args: ["--no-sandbox"] }, // Will be passed to puppeteer.launch
     }
   )
   .then((client) => {
